@@ -6,7 +6,7 @@ import ru.bsc.adminpanel.model.ClientEntity
 interface ClientRepository {
     fun getAll(): List<ClientEntity>
     fun create(dto: ClientDto): Long
-    fun getById(id: Long): ClientEntity?
+    fun findById(id: Long): ClientEntity?
     fun update(id: Long, dto: ClientDto)
     fun deleteById(id: Long)
 
