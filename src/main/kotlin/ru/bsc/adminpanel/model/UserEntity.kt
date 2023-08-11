@@ -7,5 +7,6 @@ class UserEntity(
     val id: Long,
     val name: String,
     val email: String,
-    var password: String
+    var password: String = ""
 )
+

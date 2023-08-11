@@ -13,7 +13,7 @@ import java.sql.ResultSet
 class ClientRepositoryImpl(
     private val jdbcTemplate: NamedParameterJdbcTemplate
 ) : ClientRepository {
-    override fun getAll(): List<ClientEntity> =
+    override fun findAll(): List<ClientEntity> =
         jdbcTemplate.query("SELECT * FROM clients ORDER BY name", ROW_MAPPER)
 
 
@@ -40,13 +40,13 @@ class ClientRepositoryImpl(
 
 
     override fun findById(id: Long): ClientEntity? =
-        jdbcTemplate.query("SELECT * FROM users WHERE id=?", mapOf("id" to id), ROW_MAPPER).firstOrNull()
+        jdbcTemplate.query("SELECT * FROM clients WHERE id=?", mapOf("id" to id), ROW_MAPPER).firstOrNull()
 
 
     override fun update(id: Long, dto: ClientDto) {
         jdbcTemplate.update(
-            "UPDATE clients telegram_id = :telegram_id, name = :name, username = :username, phone = :phone, " +
-                    "birthday = :birthday, is_banned = :is_banned",
+            "UPDATE clients SET telegram_id = :telegram_id, name = :name, username = :username, phone = :phone, " +
+                    "birthday = :birthday, is_banned = :is_banned WHERE id=?",
             mapOf(
                 "id" to id,
                 "telegram_id" to dto.telegramId,
@@ -61,24 +61,24 @@ class ClientRepositoryImpl(
 
 
     override fun deleteById(id: Long) {
-        jdbcTemplate.update("DELETE FROM user WHERE id=?", mapOf("id" to id))
+        jdbcTemplate.update("DELETE FROM clients WHERE id=?", mapOf("id" to id))
     }
 
 
     override fun findByTelegramId(telegramId: String): ClientEntity? =
-        jdbcTemplate.query("SELECT * FROM users WHERE telegram_id=?", mapOf("id" to telegramId), ROW_MAPPER)
+        jdbcTemplate.query("SELECT * FROM clients WHERE telegram_id=?", mapOf("id" to telegramId), ROW_MAPPER)
             .firstOrNull()
 
 
     override fun deleteByTelegramId(telegramId: String) {
-        jdbcTemplate.update("DELETE FROM user WHERE telegram_id=?", mapOf("telegram_id" to telegramId))
+        jdbcTemplate.update("DELETE FROM clients WHERE telegram_id=?", mapOf("telegram_id" to telegramId))
     }
 
 
     override fun updateByTelegramId(telegramId: String, dto: ClientDto) {
         jdbcTemplate.update(
-            "UPDATE clients name = :name, username = :username, phone = :phone, " +
-                    "birthday = :birthday, is_banned = :is_banned",
+            "UPDATE clients SET name = :name, username = :username, phone = :phone, " +
+                    "birthday = :birthday, is_banned = :is_banned WHERE telegram_id=?",
             mapOf(
                 "telegram_id" to telegramId,
                 "name" to dto.name,
@@ -92,7 +92,7 @@ class ClientRepositoryImpl(
 
 
     override fun findAllByisBanned(): List<ClientEntity> =
-        jdbcTemplate.query("SELECT * FROM users WHERE is_banned=?", mapOf("is_banned" to true), ROW_MAPPER)
+        jdbcTemplate.query("SELECT * FROM clients WHERE is_banned=?", mapOf("is_banned" to true), ROW_MAPPER)
 
 
     private companion object {

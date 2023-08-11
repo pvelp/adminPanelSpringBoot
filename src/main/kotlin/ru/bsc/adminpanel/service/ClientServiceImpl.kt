@@ -1,7 +1,5 @@
 package ru.bsc.adminpanel.service
 
-//import org.slf4j.Logger
-//import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import ru.bsc.adminpanel.dto.ClientDto
 import ru.bsc.adminpanel.model.ClientEntity
@@ -10,8 +8,7 @@ import java.lang.RuntimeException
 
 @Service
 class ClientServiceImpl(private val clientRepository: ClientRepository) : ClientService {
-//    private val logger = LoggerFactory.getLogger(ClientService::class.java)
-    override fun getAll(): List<ClientDto> = clientRepository.getAll().map { it.toDto() }
+    override fun getAll(): List<ClientDto> = clientRepository.findAll().map { it.toDto() }
 
     override fun getById(id: Long): ClientDto =
         clientRepository.findById(id)?.toDto() ?: throw RuntimeException("Client with id = $id not found")
