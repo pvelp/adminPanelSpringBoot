@@ -13,7 +13,13 @@ class ClientServiceImpl(private val clientRepository: ClientRepository) : Client
     override fun getById(id: Long): ClientDto =
         clientRepository.findById(id)?.toDto() ?: throw RuntimeException("Client with id = $id not found")
 
-    override fun create(dto: ClientDto): Long = clientRepository.create(dto)
+    override fun create(dto: ClientDto): Long {
+      val res = clientRepository.create(dto)
+      if (res == 0L){
+          throw RuntimeException("Something comes wrong in create client, returned 0")
+      }
+        return res
+    }
 
     override fun update(id: Long, dto: ClientDto) {
         clientRepository.update(id, dto)
